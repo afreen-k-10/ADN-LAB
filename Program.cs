@@ -1,102 +1,146 @@
-﻿// See https://aka.ms/new-console-template for more information
-//Arithmetic operations
-
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-int num1 = 20;
-int num2 = 10;
+namespace Experiment4
+{
 
-//Addition
-Console.WriteLine(num1 + num2);//30
+    public delegate int performCalculation(int x, int y);
 
-//Subtraction
-Console.WriteLine(num1 - num2);//10
+    internal class Program
+    {
+        static int Add(int a, int b)
+        {
+            return a + b;
+        }
 
-//Multiplication
-Console.WriteLine(num1 * num2);//200
+        static int Subtraction(int a, int b)
+        {
+            return a - b;
+        }
 
-//Division
-Console.WriteLine(num1 / num2);//2
+        static int Multiplication(int a, int b)
+        {
+            return a * b;
+        }
 
-//Modulus
-Console.WriteLine(num1 % num2);//0
+        static int Division(int a, int b)
+        {
+            return a / b;
+        }
+        static void Main(string[] args)
+        {
+            performCalculation deladd = Add;
+            performCalculation delsub = Subtraction;
+            int resAdd = deladd(1, 2);
+            int resSubtraction = delsub(5, 3);
+            Console.WriteLine($"Addition of 1 and 2 is : {resAdd} ");
+            Console.WriteLine($"Subtraction of 5 and 3 is : {resSubtraction} ");
 
+            Func<int, int> square = x => x * x;
+            int result = square(5);
+            Console.WriteLine(result);
 
+            Func<int, int, int> Add = (x, y) => x + y;
+            Console.WriteLine(Add(4, 5));
 
+        }
+    }
+}
 
-//Variables
-string name = "Sanjana";
-Console.WriteLine(name);
+//Calculator using delegates
+namespace DelegateCalculator
+{
+    public delegate double Calculation(double a, double b);
 
-int num = 5;
-Console.WriteLine(num);
+    class Program
+    {
+        static double Add(double x, double y) => x + y;
+        static double Subtract(double x, double y) => x - y;
+        static double Multiply(double x, double y) => x * y;
+        static double Divide(double x, double y) => y != 0 ? x / y : 0;
 
-bool b = true;
-Console.WriteLine(b);
+        static void Main(string[] args)
+        {
+            Console.WriteLine("--- C# Delegate Calculator ---");
+            
+            Console.Write("Enter first number: ");
+            double num1 = double.Parse(Console.ReadLine());
 
-char ch = 'S';
-Console.WriteLine(ch);
+            Console.Write("Enter second number: ");
+            double num2 = double.Parse(Console.ReadLine());
 
-double d = 10.5;
-Console.WriteLine(d);
+            Console.WriteLine("Choose Operation: 1.Add, 2.Subtract, 3.Multiply, 4.Divide");
+            int choice = int.Parse(Console.ReadLine());
 
-//Constants
-const int n = 50;
-Console.WriteLine(n);
-//error n = 10;
+            Calculation calc = null;
 
+            switch (choice)
+            {
+                case 1: calc = Add; break;
+                case 2: calc = Subtract; break;
+                case 3: calc = Multiply; break;
+                case 4: calc = Divide; break;
+                default: 
+                    Console.WriteLine("Invalid choice.");
+                    return;
+            }
 
-string str = "sanjana";
-Console.WriteLine("Hello " + str);
+            double result = calc(num1, num2);
+            Console.WriteLine($"Result: {result}");
+        }
+    }
+}
 
-//multiple variables
-int x = 2, y = 3, z = 4;
-Console.WriteLine(x + y + z);
+//Multicast delegate example
+public delegate void MyDelegate(string name);
 
-//Type Casting
-int myInt = 9;
-double myDouble = myInt;       // Automatic casting: int to double
+class Program
+{
+    static void Hello(string name) => Console.WriteLine($"Hello, {name}!");
+    static void Goodbye(string name) => Console.WriteLine($"Goodbye, {name}!");
+    static void Welcome(string name) => Console.WriteLine($"Welcome to C#, {name}!");
 
-Console.WriteLine(myInt);      // Outputs 9
-Console.WriteLine(myDouble);   // Outputs 9
+    static void Main()
+    {
+        MyDelegate del = Hello;
 
-double Double = 9.78;
-int Int = (int)myDouble;    // Manual casting: double to int
+        del += Goodbye;
+        del += Welcome;
 
-Console.WriteLine(myDouble);   // Outputs 9.78
-Console.WriteLine(myInt);      // Outputs 9
+        Console.WriteLine("--- Invoking all three methods ---");
+        del("Alice"); 
 
+        del -= Goodbye;
 
-//user Input
-Console.WriteLine("Enter your Name : ");
-string str1 = Console.ReadLine();
+        Console.WriteLine("\n--- After removing 'Goodbye' ---");
+        del("Alice");
+    }
+}
 
+//replace method with lambda expressions
+// public int Addition(int x, int y) 
+// {
+//     return x + y;
+// }
+// Func<int, int, int> add = (x, y) => x + y;
 
-Console.WriteLine("Enter your age:");
-//This line shows an error message that cannot convert string into int implicitly...
-//int age = Console.ReadLine();
-int age = Convert.ToInt32(Console.ReadLine());
+//Sort List using Lambda
+// List<int> numbers = new List<int> { 5, 3, 1, 4, 2 };
+// numbers.Sort((x, y) => x.CompareTo(y));
+// numbers.Sort((x, y) => y.CompareTo(x));
 
+//Where delegates and lambda expressions are used in industry levels
+// 1. Language Integrated Query (LINQ) - Data Processing 
+// Lambda expressions are the core building block of LINQ in C#.
+// Industry developers use them extensively to query, filter, and transform 
+// data collections (lists, databases, XML) using a declarative syntax.
+// 2. Event Handling and UI Development
 
-//Comparison operators
-Console.WriteLine(num1 > num2);
-
-//Math operators
-Console.WriteLine(Math.Max(5, 10));
-Console.WriteLine(Math.Min(5, 10));
-Console.WriteLine(Math.Sqrt(64));
-Console.WriteLine(Math.Abs(-3));
-
-//Strings
-string str2 = "sanjana";
-string str3 = "sakshi";
-string str4 = str2 + str3;
-Console.WriteLine(str4);
-string str5 = string.Concat(str2, str3);
-Console.WriteLine(str5);
-
-//Booleans
-bool isTrue = true;
-Console.WriteLine(isTrue);
-
-
+//what is linq queries
+// LINQ (Language Integrated Query) is a set of features in C# that provides a consistent, 
+// declarative way to query and manipulate data from various sources—such as 
+// in-memory collections (arrays, lists), SQL databases, and XML documents—directly within 
+// the C# language.
